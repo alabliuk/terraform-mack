@@ -101,13 +101,15 @@ resource "aws_instance" "aws-linux" {
   count         = 5
   ami           = data.aws_ami.amazonlinux.id
   instance_type = var.instance_type
-  subnet_id = data.aws_ami.amazonlinux
-  key_name  = "aulamack"
+  subnet_id     = data.aws_ami.amazonlinux
+  key_name      = "aulamack"
 
   user_data = <<-EOF
         sudo apt-get update
 		sudo apt-get install nginx
         echo "*** Instalacao nginx finalizada ok"
+        sudo apt-get install mysql-server
+        echo "*** Instalacao mysql finalizada ok"
         EOF
 
   root_block_device {
@@ -125,8 +127,8 @@ resource "aws_instance" "ubuntu" {
 
   ami           = data.aws_ami.ubuntu.id
   instance_type = var.instance_type
-  subnet_id = data.aws_ami.ubuntu
-  key_name  = "aulamack"
+  subnet_id     = data.aws_ami.ubuntu
+  key_name      = "aulamack"
 
   user_data = <<-EOF
         sudo apt-get update
@@ -136,7 +138,7 @@ resource "aws_instance" "ubuntu" {
 
   root_block_device {
     volume_type = "gp3"
-    volume_size = 20
+    volume_size = (terraform.workspace == "Dev") ? 10 : (terraform.workspace == "Hom") ? 20 : 50
   }
 
   tags = {
