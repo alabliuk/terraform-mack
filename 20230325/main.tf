@@ -183,3 +183,10 @@ resource "aws_db_instance" "bd_mack" {
   parameter_group_name  = var.parameter_group_name
   skip_final_snapshot   = var.skip_final_snapshot
 }
+
+resource "aws_db_instance" "rds_replica" {
+  identifier                    = "rds-mysql-prd-replica"
+  engine                        = var.engine
+  engine_version                = var.engine_version
+  instance_class                = var.instance_class
+}
